@@ -14,6 +14,7 @@
     <description>大数据之hadoop相关技术栈</description>
     <modules>
         <module>hdfs</module>
+        <module>rpc-of-hadoop</module>
     </modules>
 
 
