@@ -6,7 +6,9 @@
 
 package com.gyoomi.hadoop.rpc.publish;
 
+import com.gyoomi.hadoop.rpc.ClientNameNodeProtocol;
 import com.gyoomi.hadoop.rpc.LoginServiceInterface;
+import com.gyoomi.hadoop.rpc.impl.ClientNameNodeProtocolImpl;
 import com.gyoomi.hadoop.rpc.impl.LoginServiceImpl;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.ipc.RPC;
@@ -32,6 +34,17 @@ public class Publish
 		RPC.Server server = builder.build();
 		server.start();
 		System.out.println("server启动了...");
+
+		RPC.Builder builder2 = new RPC.Builder(new Configuration());
+		builder2
+			.setBindAddress("localhost")
+			.setPort(13145)
+			.setProtocol(ClientNameNodeProtocol.class)
+			.setInstance(new ClientNameNodeProtocolImpl());
+
+		RPC.Server server2 = builder2.build();
+		server2.start();
+		System.out.println("server2启动了...");
 	}
 
 }

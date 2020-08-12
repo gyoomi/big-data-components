@@ -25,6 +25,10 @@ public class Main
 		LoginServiceInterface proxy = RPC.getProxy(LoginServiceInterface.class, 1L, new InetSocketAddress("localhost", 13144), new Configuration());
 		String login = proxy.login("jack", "哈哈哈哈");
 		System.out.println(login);
+
+		ClientNameNodeProtocol proxy2 = RPC.getProxy(ClientNameNodeProtocol.class, 100L, new InetSocketAddress("localhost", 13145), new Configuration());
+		String metaData = proxy2.getMetaData("/test");
+		System.out.println(metaData);
 	}
 
 }
