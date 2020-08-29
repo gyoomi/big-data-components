@@ -15,6 +15,7 @@
     <modules>
         <module>hdfs</module>
         <module>rpc-of-hadoop</module>
+	    <module>mapreduce-of-hadoop</module>
     </modules>
 
 
