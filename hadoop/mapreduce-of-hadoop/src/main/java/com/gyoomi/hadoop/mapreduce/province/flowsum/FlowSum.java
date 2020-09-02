@@ -70,6 +70,9 @@ public class FlowSum
 		job.setMapperClass(FlowSumMapper.class);
 		job.setReducerClass(FlowSumReducer.class);
 
+		job.setPartitionerClass(ProvincePartitioner.class);
+		job.setNumReduceTasks(4);
+
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(FlowBean.class);
 
