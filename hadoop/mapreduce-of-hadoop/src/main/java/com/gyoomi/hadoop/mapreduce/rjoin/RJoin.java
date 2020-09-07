@@ -125,7 +125,7 @@ public class RJoin
 		job.setMapperClass(RjoinMapper.class);
 		job.setReducerClass(RJoinReducer.class);
 
-		job.setMapOutputValueClass(Text.class);
+		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(InfoBean.class);
 
 		job.setOutputKeyClass(InfoBean.class);
