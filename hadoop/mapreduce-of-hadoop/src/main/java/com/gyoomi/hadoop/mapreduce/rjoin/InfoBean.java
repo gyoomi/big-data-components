@@ -6,7 +6,7 @@
 
 package com.gyoomi.hadoop.mapreduce.rjoin;
 
-import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -18,7 +18,7 @@ import java.io.IOException;
  * @author Leon
  * @date 2020-09-04 9:48
  */
-public class InfoBean implements Writable
+public class InfoBean implements WritableComparable<InfoBean>
 {
 
 	private int orderId;
@@ -26,7 +26,7 @@ public class InfoBean implements Writable
 	private String productId;
 	private int amount;
 	private String productName;
-	private int categoryId;
+	private String categoryId;
 	private float price;
 
 	/**
@@ -36,7 +36,7 @@ public class InfoBean implements Writable
 
 	public InfoBean() {}
 
-	public void set(int orderId, String orderDate, String productId, int amount, String productName, int categoryId, float price, String flag)
+	public void set(int orderId, String orderDate, String productId, int amount, String productName, String categoryId, float price, String flag)
 	{
 		this.orderId = orderId;
 		this.orderDate = orderDate;
@@ -56,7 +56,7 @@ public class InfoBean implements Writable
 		dataOutput.writeUTF(this.productId);
 		dataOutput.writeInt(this.amount);
 		dataOutput.writeUTF(this.productName);
-		dataOutput.writeInt(this.categoryId);
+		dataOutput.writeUTF(this.categoryId);
 		dataOutput.writeFloat(this.price);
 		dataOutput.writeUTF(this.flag);
 	}
@@ -69,7 +69,7 @@ public class InfoBean implements Writable
 		this.productId = dataInput.readUTF();
 		this.amount = dataInput.readInt();
 		this.productName = dataInput.readUTF();
-		this.categoryId = dataInput.readInt();
+		this.categoryId = dataInput.readUTF();
 		this.price = dataInput.readFloat();
 		this.flag = dataInput.readUTF();
 	}
@@ -114,11 +114,11 @@ public class InfoBean implements Writable
 		this.productName = productName;
 	}
 
-	public int getCategoryId() {
+	public String getCategoryId() {
 		return categoryId;
 	}
 
-	public void setCategoryId(int categoryId) {
+	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
 
@@ -136,5 +136,17 @@ public class InfoBean implements Writable
 
 	public void setFlag(String flag) {
 		this.flag = flag;
+	}
+
+	@Override
+	public String toString()
+	{
+		return orderId + " " +  orderDate + " " + productId + " " +  amount + " " +  productName + " " + categoryId + " " + price + " " + flag;
+	}
+
+	@Override
+	public int compareTo(InfoBean o)
+	{
+		return this.productId.compareTo(o.getProductId());
 	}
 }

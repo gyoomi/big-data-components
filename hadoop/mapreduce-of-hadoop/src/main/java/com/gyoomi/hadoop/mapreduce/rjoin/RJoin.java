@@ -6,6 +6,7 @@
 
 package com.gyoomi.hadoop.mapreduce.rjoin;
 
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -35,32 +36,29 @@ public class RJoin
 	static class RjoinMapper extends Mapper<LongWritable, Text, Text, InfoBean>
 	{
 
-		InfoBean infoBean = new InfoBean();
-		Text keyBean = new Text();
-
 		@Override
 		protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException
 		{
+			InfoBean infoBean = new InfoBean();
+
 			String lineText = value.toString();
 			FileSplit inputSplit = (FileSplit) context.getInputSplit();
 			String name = inputSplit.getPath().getName();
 			String productId = "";
 			if (name.startsWith("order"))
 			{
-				String[] fields = lineText.split("\t");
+				String[] fields = lineText.split(",");
 				productId = fields[2];
-				infoBean.set(Integer.parseInt(fields[0]), fields[1], productId, Integer.parseInt(fields[3]), "", 0, 0, "0");
+				infoBean.set(Integer.parseInt(fields[0]), fields[1], productId, Integer.parseInt(fields[3]), "", "0", 0, "0");
 			}
 			else
 			{
-				String[] fields = lineText.split("\t");
+				String[] fields = lineText.split(",");
 				productId = fields[0];
-				infoBean.set(0, "", productId, 0, fields[1], Integer.parseInt(fields[2]), Float.parseFloat(fields[3]), "1");
+				infoBean.set(0, "", productId, 0, fields[1], fields[2], Float.parseFloat(fields[3]), "1");
 			}
 
-
-			keyBean.set(productId);
-			context.write(keyBean, infoBean);
+			context.write(new Text(productId), infoBean);
 		}
 
 	}
@@ -116,6 +114,10 @@ public class RJoin
 
 	public static void main(String[] args) throws Exception
 	{
+		if (null == args || args.length == 0)
+		{
+			throw new RuntimeException("args 参数为空");
+		}
 		Configuration configuration = new Configuration();
 		Job job = Job.getInstance(configuration);
 		job.setJarByClass(RJoin.class);
@@ -124,7 +126,7 @@ public class RJoin
 		job.setReducerClass(RJoinReducer.class);
 
 		job.setMapOutputValueClass(Text.class);
-		job.setOutputValueClass(InfoBean.class);
+		job.setMapOutputValueClass(InfoBean.class);
 
 		job.setOutputKeyClass(InfoBean.class);
 		job.setOutputValueClass(NullWritable.class);
