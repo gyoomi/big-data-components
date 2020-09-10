@@ -41,7 +41,14 @@ public class MapSideJoin
 		@Override
 		protected void setup(Context context) throws IOException, InterruptedException
 		{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("pdts.txt")));
+			//获取缓存文件路径
+			URI[] cacheFiles = context.getCacheFiles();
+			URI cacheFileUri = cacheFiles[0];
+			String path = cacheFileUri.toURL().getPath();
+			System.out.println("==================================");
+			System.out.println(path);
+			System.out.println("==================================");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
 			String productLineValue;
 			while (StringUtils.isNotBlank(productLineValue = reader.readLine()))
 			{
@@ -74,7 +81,7 @@ public class MapSideJoin
 		job.setOutputValueClass(NullWritable.class);
 
 		FileInputFormat.setInputPaths(job, new Path("D:/bigdata/mapjoininput"));
-		FileOutputFormat.setOutputPath(job, new Path("D:/bigdata/mapjoinoutput1"));
+		FileOutputFormat.setOutputPath(job, new Path("D:/bigdata/mapjoinoutput"));
 		// 指定需要缓存一个文件到所有的maptask运行节点工作目录
 		/* job.addArchiveToClassPath(archive); */// 缓存jar包到task运行节点的classpath中
 		/* job.addFileToClassPath(file); */// 缓存普通文件到task运行节点的classpath中
@@ -87,6 +94,7 @@ public class MapSideJoin
 		job.setNumReduceTasks(0);
 		boolean res = job.waitForCompletion(true);
 		System.exit(res ? 0 : 1);
+		System.out.println("over");
 	}
 
 }
