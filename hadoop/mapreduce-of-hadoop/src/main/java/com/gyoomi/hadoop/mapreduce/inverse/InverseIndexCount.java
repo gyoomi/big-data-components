@@ -67,6 +67,10 @@ public class InverseIndexCount
 
 	public static void main(String[] args) throws Exception
 	{
+		if (args.length <= 0)
+		{
+			args = new String[]{"D:/bigdata/inverindexinput", "D:/bigdata/inverindexoutput"};
+		}
 		Configuration config = new Configuration();
 		Job job = Job.getInstance(config);
 		job.setJarByClass(InverseIndexCount.class);

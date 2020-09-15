@@ -50,7 +50,7 @@ public class InverseIndexReduce
 			StringBuffer sb = new StringBuffer();
 			for (Text value : values)
 			{
-				sb.append(values.toString().replace("\t", "--->") + "\t");
+				sb.append(value.toString().replace("\t", "--->")).append("\t");
 			}
 			context.write(key, new Text(sb.toString()));
 		}
@@ -58,9 +58,9 @@ public class InverseIndexReduce
 
 	public static void main(String[] args) throws Exception
 	{
-		if (args.length < 1)
+		if (args.length <= 0)
 		{
-			throw new RuntimeException("参数缺失，请检查相关参数！");
+			args = new String[]{"D:/bigdata/inverindexoutput", "D:/bigdata/inverindexoutput22"};
 		}
 
 		Configuration config = new Configuration();
